@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eavesdrop bar bk - Yahoo Search</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- HERE Maps SDK -->
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="header-left">
+        <!-- Yahoo Logo -->
+        <a href="#" class="logo">
+          <svg width="86" height="24" viewBox="0 0 86 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24.778 5.86703V7.1099C24.07 6.18452 22.7591 5.55223 21.241 5.55223C17.6528 5.55223 14.9798 8.74625 14.9798 12.4966C14.9798 16.3501 17.6259 19.441 21.241 19.441C22.7591 19.441 24.07 18.8331 24.778 17.8562V19.0963H29.2544V5.86703H24.778ZM30.7995 0.00539959V19.0963H35.4375V12.0407C35.4375 10.6676 36.0916 9.85073 37.1387 9.85073C38.1858 9.85073 38.7376 10.5617 38.7376 11.8833V19.0909H43.3729V10.7734C43.3729 7.55223 41.6448 5.5468 38.8668 5.5468C38.2059 5.52267 37.5486 5.65577 36.9481 5.93534C36.3477 6.21491 35.8209 6.63311 35.4106 7.15604V0L30.7995 0.00539959ZM73.2061 12.4884C73.2061 16.4477 70.194 19.4328 66.1859 19.4328C62.1778 19.4328 59.1657 16.4477 59.1657 12.4884C59.1657 8.52915 62.1778 5.54408 66.1859 5.54408C70.194 5.54408 73.2061 8.52915 73.2061 12.4884ZM58.3797 12.4884C58.3797 16.4477 55.3676 19.4328 51.3622 19.4328C47.3568 19.4328 44.342 16.4477 44.342 12.4884C44.342 8.52915 47.3541 5.54408 51.3622 5.54408C55.3702 5.54408 58.3797 8.52915 58.3797 12.4884ZM0 5.85888L5.60432 19.194L3.58816 24H8.51146L15.9758 5.85888H11.0794L8.04039 13.6201L5.02827 5.85617L0 5.85888ZM22.1831 15.2076C21.826 15.2152 21.471 15.1505 21.1392 15.0172C20.8074 14.884 20.5055 14.6849 20.2515 14.4318C19.9974 14.1787 19.7964 13.8768 19.6602 13.5439C19.5241 13.211 19.4557 12.8539 19.459 12.4939C19.4553 12.1337 19.5235 11.7765 19.6595 11.4434C19.7955 11.1103 19.9965 10.8083 20.2506 10.5551C20.5048 10.3019 20.8068 10.1029 21.1388 9.96976C21.4708 9.83663 21.8259 9.77215 22.1831 9.78017C22.5378 9.7758 22.8898 9.84301 23.2183 9.97784C23.5468 10.1127 23.8453 10.3124 24.0961 10.5653C24.347 10.8181 24.5451 11.119 24.6788 11.4502C24.8126 11.7815 24.8792 12.1363 24.8749 12.4939C24.8792 12.8515 24.8126 13.2063 24.6788 13.5375C24.5451 13.8687 24.347 14.1696 24.0961 14.4225C23.8453 14.6754 23.5468 14.8751 23.2183 15.0099C22.8898 15.1447 22.5378 15.212 22.1831 15.2076V15.2076ZM53.9813 12.4939C53.9896 12.1436 53.9278 11.7952 53.7995 11.4695C53.6712 11.1438 53.479 10.8476 53.2345 10.5985C52.9899 10.3495 52.6981 10.1527 52.3764 10.02C52.0547 9.88735 51.7097 9.82147 51.3622 9.82632C51.0146 9.82147 50.6697 9.88735 50.3479 10.02C50.0262 10.1527 49.7344 10.3495 49.4898 10.5985C49.2453 10.8476 49.0532 11.1438 48.9248 11.4695C48.7965 11.7952 48.7347 12.1436 48.743 12.4939C48.7347 12.8441 48.7965 13.1924 48.9249 13.5179C49.0532 13.8434 49.2454 14.1395 49.49 14.3883C49.7346 14.6371 50.0264 14.8336 50.3481 14.966C50.6698 15.0984 51.0147 15.164 51.3622 15.1588C51.7096 15.164 52.0545 15.0984 52.3762 14.966C52.6979 14.8336 52.9898 14.6371 53.2343 14.3883C53.4789 14.1395 53.6711 13.8434 53.7995 13.5179C53.9278 13.1924 53.9897 12.8441 53.9813 12.4939ZM68.805 12.4939C68.8134 12.1436 68.7515 11.7952 68.6232 11.4695C68.4949 11.1438 68.3027 10.8476 68.0582 10.5985C67.8137 10.3495 67.5218 10.1527 67.2001 10.02C66.8784 9.88735 66.5334 9.82147 66.1859 9.82632C65.8383 9.82147 65.4934 9.88735 65.1717 10.02C64.8499 10.1527 64.5581 10.3495 64.3136 10.5985C64.069 10.8476 63.8769 11.1438 63.7486 11.4695C63.6202 11.7952 63.5584 12.1436 63.5668 12.4939C63.5584 12.8441 63.6202 13.1924 63.7486 13.5179C63.8769 13.8434 64.0692 14.1395 64.3137 14.3883C64.5583 14.6371 64.8502 14.8336 65.1719 14.966C65.4936 15.0984 65.8384 15.164 66.1859 15.1588C66.5333 15.164 66.8782 15.0984 67.1999 14.966C67.5216 14.8336 67.8135 14.6371 68.058 14.3883C68.3026 14.1395 68.4948 13.8434 68.6232 13.5179C68.7515 13.1924 68.8134 12.8441 68.805 12.4939ZM73.7821 16.2931C73.7767 16.6934 73.8508 17.0908 74 17.4618C74.1493 17.8328 74.3706 18.1699 74.651 18.4534C74.9314 18.7369 75.2653 18.9609 75.6329 19.1123C76.0005 19.2638 76.3945 19.3395 76.7916 19.3352C77.2018 19.3384 77.6086 19.2593 77.9882 19.1025C78.3679 18.9458 78.7128 18.7145 79.0029 18.422C79.293 18.1295 79.5225 17.7818 79.678 17.3991C79.8335 17.0164 79.9119 16.6062 79.9087 16.1927C79.9156 15.792 79.8424 15.394 79.6935 15.0224C79.5446 14.6508 79.323 14.3133 79.0419 14.0299C78.7608 13.7465 78.426 13.5231 78.0574 13.373C77.6888 13.2228 77.294 13.1491 76.8965 13.156C76.4868 13.1546 76.0808 13.2349 75.702 13.3923C75.3232 13.5497 74.979 13.7812 74.6893 14.0732C74.3995 14.3653 74.17 14.7123 74.0138 15.0942C73.8577 15.4761 73.778 15.8854 73.7794 16.2985L73.7821 16.2931ZM80.3824 0.0108323L75.4457 11.9919H80.9477L85.871 0.00268323L80.3824 0.0108323Z" fill="#7D2EFF"/>
+          </svg>
+        </a>
+        <!-- Search Field -->
+        <div class="search-field">
+          <input type="text" value="Eavesdrop BK" class="search-input" />
+          <div class="search-icons">
+            <button class="icon-btn search-icon-btn clear-btn" aria-label="Clear search">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M9 3L3 9M3 3L9 9" stroke="#5a5a5a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="icon-btn search-icon-btn" aria-label="Voice search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1C6.9 1 6 1.9 6 3V8C6 9.1 6.9 10 8 10C9.1 10 10 9.1 10 8V3C10 1.9 9.1 1 8 1ZM12 8C12 10.21 10.21 12 8 12C5.79 12 4 10.21 4 8H3C3 10.76 5.24 13 8 13C10.76 13 13 10.76 13 8H12ZM8 14V15" stroke="#5a5a5a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </button>
+            <button class="icon-btn search-icon-btn" aria-label="Search">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M7 1C3.69 1 1 3.69 1 7C1 10.31 3.69 13 7 13C8.48 13 9.84 12.47 10.9 11.6L14.15 14.85L15 14L11.75 10.75C12.54 9.71 13 8.41 13 7C13 3.69 10.31 1 7 1ZM7 2.5C9.49 2.5 11.5 4.51 11.5 7C11.5 9.49 9.49 11.5 7 11.5C4.51 11.5 2.5 9.49 2.5 7C2.5 4.51 4.51 2.5 7 2.5Z" fill="#5a5a5a"/>
+              </svg>
+            </button>
+            <span class="search-divider"></span>
+            <button class="icon-btn search-icon-btn scout-btn" aria-label="Yahoo Scout">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 0C11.76 4.76 15.24 8.24 20 10C15.24 11.76 11.76 15.24 10 20C8.24 15.24 4.76 11.76 0 10C4.76 8.24 8.24 4.76 10 0Z" fill="url(#paint0_linear_scout)"/>
+                <defs>
+                  <linearGradient id="paint0_linear_scout" x1="10" y1="0" x2="10" y2="20" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#C938E3"/>
+                    <stop offset="1" stop-color="#4941FB"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Utility Icons -->
+      <div class="header-right">
+        <button class="icon-btn utility-btn" aria-label="Apps">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="1" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="6" y="1" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="11" y="1" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="1" y="6" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="6" y="6" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="11" y="6" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="1" y="11" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="6" y="11" width="4" height="4" rx="1" fill="#5a5a5a"/>
+            <rect x="11" y="11" width="4" height="4" rx="1" fill="#5a5a5a"/>
+          </svg>
+        </button>
+        <button class="icon-btn utility-btn" aria-label="Mail">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 4C2 3.45 2.45 3 3 3H13C13.55 3 14 3.45 14 4V12C14 12.55 13.55 13 13 13H3C2.45 13 2 12.55 2 12V4Z" stroke="#5a5a5a" stroke-width="1.2" fill="none"/>
+            <path d="M2 5L8 9L14 5" stroke="#5a5a5a" stroke-width="1.2" fill="none"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Tab Bar -->
+    <nav class="tab-bar">
+      <a href="#" class="tab tab-yahoo-scout">
+        <svg class="scout-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 0C9.41 3.81 12.19 6.59 16 8C12.19 9.41 9.41 12.19 8 16C6.59 12.19 3.81 9.41 0 8C3.81 6.59 6.59 3.81 8 0Z" fill="url(#paint0_linear_scout_tab)"/>
+          <defs>
+            <linearGradient id="paint0_linear_scout_tab" x1="8" y1="0" x2="8" y2="16" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#C938E3"/>
+              <stop offset="1" stop-color="#4941FB"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>Yahoo Scout</span>
+      </a>
+      <a href="#" class="tab active">All</a>
+      <a href="#" class="tab">Images</a>
+      <a href="#" class="tab">Videos</a>
+      <a href="#" class="tab">News</a>
+      <a href="#" class="tab">Local</a>
+      <div class="tab-spacer"></div>
+      <a href="#" class="tab tab-anytime">
+        <span>Anytime</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M3 4.5L6 7.5L9 4.5" stroke="#444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Supertop Section - Full Width -->
+  <section class="supertop-section">
+    <div class="supertop-container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="business-name">Eavesdrop</h1>
+        <p class="business-type">Listening bar, restaurant</p>
+      </div>
+      
+      <!-- Bricks Grid -->
+      <div class="bricks-grid">
+        <!-- Image Gallery (columns 1-10) -->
+        <div class="image-gallery">
+          <div class="main-image">
+            <img src="https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=600&h=400&fit=crop" alt="Eavesdrop interior with DJ booth and ambient lighting" />
+          </div>
+          <div class="side-images">
+            <div class="side-image-top">
+              <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=300&h=200&fit=crop" alt="Food plates" />
+            </div>
+            <div class="side-image-bottom">
+              <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=300&h=200&fit=crop" alt="Bar interior" />
+            </div>
+          </div>
+          <button class="gallery-btn" aria-label="View all images">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.7 2.7V11.3178L4.90405 8.67308L7.32729 11.0962L10.9621 6.25L13.3 9.05523V2.7H2.7ZM1 1H15V15H1V1Z" fill="white"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Map Card (columns 11-16) -->
+        <a href="https://search.yahoo.com/local/s;_ylt=AwrijLOKE4FpbSUAKSPumYlQ;_ylc=X1MDMTM1MTE5NTExOARfcgMyBGZyA3lmcC10LXMEZnIyA3NhLWdwLXNlYXJjaARncHJpZAM0YkcxSm1hX1RWZVY0NlB2ZmE3blhBBG5fcnNsdAMwBG5fc3VnZwMxBG9yaWdpbgNzZWFyY2gueWFob28uY29tBHBvcwMxBHBxc3RyA0VhdmVzZHJvcCBicm9va2x5BHBxc3RybAMxNwRxc3RybAM0MgRxdWVyeQNFYXZlc2Ryb3AlMkMlMjA2NzQlMjBNYW5oYXR0YW4lMjBBdmUlMkMlMjBCcm9va2x5biUyQyUyME5ZBHQ1cG9zAzEEdF9zdG1wAzE3NzAwNjY4NDMEdXNlX2Nhc2UD?p=Eavesdrop%2C+674+Manhattan+Ave%2C+Brooklyn%2C+NY&fp=1&fr=yfp-t-s&fr2=sa-gp-search&d=%22biz%3Awoeid%3D12761740%26q%3Deavesdrop%26l%3D674+manhattan+ave+brooklyn+ny%22" class="map-card" target="_blank" rel="noopener">
+          <div class="map-image" id="here-map"></div>
+          <div class="map-datum">
+            <p class="address">674 Manhattan Ave<br>Brooklyn, NY 11222</p>
+          </div>
+        </a>
+        
+        <!-- Reviews Card (columns 17-22, rows 1-3) -->
+        <a href="#reviews-summary" class="info-card reviews-card">
+          <div class="card-header">
+            <span class="card-title">Reviews</span>
+            <span class="card-chevron" aria-label="View reviews">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 4L10 8L6 12" stroke="#141414" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card-content">
+            <div class="rating-row">
+              <img src="yelplogo.png" alt="Yelp" class="yelp-icon" width="16" height="16" />
+              <span class="rating-text">5.0 on Yelp</span>
+            </div>
+            <span class="review-summary">Great vibes, amazing cocktails & vinyl</span>
+          </div>
+        </a>
+        
+        <!-- Hours Card (columns 17-22, rows 4-6) -->
+        <a href="#hours-accordion" class="info-card hours-card">
+          <div class="card-header">
+            <span class="card-title">Hours</span>
+            <span class="card-chevron" aria-label="View hours">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 4L10 8L6 12" stroke="#141414" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+          <div class="card-content">
+            <span class="status-open">Open</span>
+            <span class="closes-at">Closes at 11pm</span>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Divider -->
+      <div class="supertop-divider"></div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      <!-- Left Column -->
+      <div class="left-column">
+        <!-- Search Results -->
+        <section class="search-results">
+          <!-- Result 1: Eavesdrop Official -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=eavesdrop.nyc&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.eavesdrop.nyc</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.eavesdrop.nyc" target="_blank" rel="noopener">(eavesdrop)</a>
+            </h3>
+            <p class="result-description"><strong>Eavesdrop</strong> serves up craft cocktails, natural wines, small plates, and music in a space designed for sound. Our mission is to bring Brooklyn's community of listeners, artists, and curators together in a cozy neighborhood environment that lends itself more to listening than to dancing.</p>
+            <div class="result-sitelinks">
+              <a href="https://www.eavesdrop.nyc/drinks" target="_blank" rel="noopener">drinks</a>
+              <a href="https://www.eavesdrop.nyc/food" target="_blank" rel="noopener">food</a>
+              <a href="https://www.eavesdrop.nyc/calendar" target="_blank" rel="noopener">calendar</a>
+            </div>
+          </article>
+
+          <!-- Result 2: Resy -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=resy.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">resy.com</span>
+              <span class="result-path"> › cities › new-york-ny</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://resy.com/cities/new-york-ny/venues/eavesdrop" target="_blank" rel="noopener">Book Your Eavesdrop Reservation Now on Resy</a>
+            </h3>
+            <p class="result-description"><strong>Eavesdrop</strong> serves craft cocktails, natural wine, local beer, and shared plates in a space designed for sound. Our garden is open for the summer! For large party reservation requests for our garden please email garden@eavesdrop.nyc</p>
+            <div class="result-meta">
+              <span>Location: 674 Manhattan Ave, Brooklyn, 11222, NY</span>
+              <span>Cuisine: Cocktail Bar</span>
+            </div>
+          </article>
+
+          <!-- Result 3: Yelp -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=yelp.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.yelp.com</span>
+              <span class="result-path"> › biz › eavesdrop-brooklyn</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.yelp.com/biz/eavesdrop-brooklyn" target="_blank" rel="noopener">EAVESDROP - Updated January 2026 - 233 Photos & 123 Reviews ...</a>
+            </h3>
+            <p class="result-description">Specialties: <strong>Eavesdrop</strong> serves up craft cocktails, natural wines, small plates, and music in a space designed for sound. Our mission is to bring Brooklyn's community of listeners, artists, and curators together in a cozy neighborhood environment...</p>
+            <div class="result-meta">
+              <span class="result-rating"><span class="rating-star">★</span> 4.3/5 (105)</span>
+              <span>Location: 674 Manhattan Ave Brooklyn, NY 11222</span>
+            </div>
+          </article>
+
+          <!-- Result 4: Restaurantji -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=restaurantji.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.restaurantji.com</span>
+              <span class="result-path"> › ny › brooklyn</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.restaurantji.com/ny/brooklyn/eavesdrop/" target="_blank" rel="noopener">Eavesdrop, Brooklyn - Menu, Reviews (193), Photos (65 ...</a>
+            </h3>
+            <p class="result-description">Latest reviews, photos and ratings for <strong>Eavesdrop</strong> at 674 Manhattan Ave in Brooklyn - view the menu, hours, phone number, address and map.</p>
+            <div class="result-meta">
+              <span class="result-rating"><span class="rating-star">★</span> 4.3/5 (207)</span>
+              <span>Cuisine: Bar, Cocktail Bar</span>
+            </div>
+          </article>
+
+          <!-- Result 5: Monaghansrvc -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=monaghansrvc.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">monaghansrvc.com</span>
+              <span class="result-path"> › res › eavesdrop-reviews-menu</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://monaghansrvc.com/res/eavesdrop-reviews-menu" target="_blank" rel="noopener">Eavesdrop - Reviews & Menu - Greenpoint NYC - Monaghansrvc</a>
+            </h3>
+            <p class="result-description">Bar <strong>Eavesdrop</strong>, located at 674 Manhattan Ave in Brooklyn, NY, is a popular watering hole among locals and visitors alike. With a cozy and intimate atmosphere, this bar is the perfect place to unwind after a long day or to catch up with friends.</p>
+          </article>
+
+          <!-- Result 6: InsideHook -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=insidehook.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.insidehook.com</span>
+              <span class="result-path"> › drinks › eavesdrop-brooklyn-bar</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.insidehook.com/drinks/eavesdrop-brooklyn-bar" target="_blank" rel="noopener">Eavesdrop Is the Rare NYC Bar Built for Great Conversation ...</a>
+            </h3>
+            <p class="result-description">On their site, <strong>Eavesdrop</strong> describes the space as follows: "Eavesdrop serves up craft cocktails, natural wines, small plates, and music in a space designed for sound. Our mission is to bring Brooklyn's community of listeners, artists, and curators together..."</p>
+            <div class="result-meta">
+              <span>Apr 15, 2022</span>
+            </div>
+          </article>
+
+          <!-- Result 7: The Spaces -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=thespaces.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">thespaces.com</span>
+              <span class="result-path"> › eavesdrop-brooklyn-vinyl-bar</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://thespaces.com/eavesdrop-brooklyn-vinyl-bar" target="_blank" rel="noopener">Eavesdrop channels the spirit of Japan's 1950s listening bars ...</a>
+            </h3>
+            <p class="result-description">Every part of this Brooklyn bar and restaurant has been designed to maximise the music experience. <strong>Eavesdrop</strong>'s interiors were led by co-owner Danny Taylor and are informed by his experience designing spaces and audio experiences for hotels and record studios.</p>
+          </article>
+
+          <!-- Result 8: Time Out -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=timeout.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.timeout.com</span>
+              <span class="result-path"> › newyork › bars › eavesdrop</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.timeout.com/newyork/bars/eavesdrop" target="_blank" rel="noopener">Eavesdrop - Bars in Greenpoint, Brooklyn - Time Out</a>
+            </h3>
+            <p class="result-description">A listening bar in Greenpoint where you can enjoy vinyl-spun tunes, excellent cocktails and Japanese-inspired small plates. The intimate space features a state-of-the-art sound system and rotating DJs.</p>
+          </article>
+
+          <!-- Result 9: Eater NY -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=eater.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">ny.eater.com</span>
+              <span class="result-path"> › venue › eavesdrop</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://ny.eater.com/venue/eavesdrop" target="_blank" rel="noopener">Eavesdrop - Brooklyn Bar & Restaurant - Eater NY</a>
+            </h3>
+            <p class="result-description"><strong>Eavesdrop</strong> is a Brooklyn listening bar serving natural wines, craft cocktails, and globally-inspired small plates. Located in Greenpoint at 674 Manhattan Avenue.</p>
+          </article>
+
+          <!-- Result 10: Infatuation -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=theinfatuation.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.theinfatuation.com</span>
+              <span class="result-path"> › new-york › reviews › eavesdrop</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.theinfatuation.com/new-york/reviews/eavesdrop" target="_blank" rel="noopener">Eavesdrop Review - Greenpoint - The Infatuation</a>
+            </h3>
+            <p class="result-description">This Greenpoint listening bar takes its audio seriously, with a custom sound system and vinyl-only DJ sets. The cocktails and small plates are just as carefully curated as the music selection.</p>
+          </article>
+
+          <!-- Result 11: Foursquare -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=foursquare.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">foursquare.com</span>
+              <span class="result-path"> › v › eavesdrop</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://foursquare.com/v/eavesdrop" target="_blank" rel="noopener">Eavesdrop - Cocktail Bar in Greenpoint - Foursquare</a>
+            </h3>
+            <p class="result-description">See 47 photos and 12 tips from 284 visitors to <strong>Eavesdrop</strong>. "The cocktails are incredible and the sound system is unmatched. Perfect for a date night."</p>
+            <div class="result-meta">
+              <span class="result-rating"><span class="rating-star">★</span> 9.2/10</span>
+            </div>
+          </article>
+
+          <!-- Result 12: Brooklyn Magazine -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=bkmag.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.bkmag.com</span>
+              <span class="result-path"> › bars › eavesdrop-greenpoint</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.bkmag.com/bars/eavesdrop-greenpoint" target="_blank" rel="noopener">Eavesdrop Brings Japanese Listening Bar Culture to Greenpoint</a>
+            </h3>
+            <p class="result-description">The newest addition to Brooklyn's bar scene pays homage to Tokyo's legendary listening bars. <strong>Eavesdrop</strong> features a meticulously designed sound system and a menu of Japanese-inspired cocktails and small plates.</p>
+          </article>
+
+          <!-- Result 13: TripAdvisor -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=tripadvisor.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.tripadvisor.com</span>
+              <span class="result-path"> › Restaurant_Review › Eavesdrop</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.tripadvisor.com/Restaurant_Review-g60827-d23456789-Reviews-Eavesdrop-Brooklyn_New_York.html" target="_blank" rel="noopener">EAVESDROP, Brooklyn - Greenpoint - Restaurant Reviews ...</a>
+            </h3>
+            <p class="result-description"><strong>Eavesdrop</strong>, Brooklyn: See 89 unbiased reviews of Eavesdrop, rated 4.5 of 5 on Tripadvisor and ranked #234 of 6,891 restaurants in Brooklyn.</p>
+            <div class="result-meta">
+              <span class="result-rating"><span class="rating-star">★</span> 4.5/5 (89)</span>
+            </div>
+          </article>
+
+          <!-- Result 14: Google Maps -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=google.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.google.com</span>
+              <span class="result-path"> › maps › place › Eavesdrop</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.google.com/maps/place/Eavesdrop" target="_blank" rel="noopener">Eavesdrop - Google Maps</a>
+            </h3>
+            <p class="result-description">Craft cocktail bar with Japanese-inspired small plates and a high-end sound system for vinyl listening sessions. Located at 674 Manhattan Ave, Brooklyn, NY 11222.</p>
+            <div class="result-meta">
+              <span class="result-rating"><span class="rating-star">★</span> 4.6/5 (312)</span>
+              <span>Open until 1:00 AM</span>
+            </div>
+          </article>
+
+          <!-- Result 15: OpenTable -->
+          <article class="algo-result">
+            <div class="result-url">
+              <img class="result-favicon" src="https://www.google.com/s2/favicons?domain=opentable.com&sz=16" alt="" width="16" height="16" />
+              <span class="result-domain">www.opentable.com</span>
+              <span class="result-path"> › eavesdrop-brooklyn</span>
+            </div>
+            <h3 class="result-title">
+              <a href="https://www.opentable.com/eavesdrop-brooklyn" target="_blank" rel="noopener">Eavesdrop Reservations in Brooklyn, NY - OpenTable</a>
+            </h3>
+            <p class="result-description">Book now at <strong>Eavesdrop</strong> in Brooklyn, NY. Explore menu, see photos and read reviews: "Amazing vibe, incredible cocktails, and the DJ was spinning fantastic records all night."</p>
+          </article>
+        </section>
+        
+        <!-- Pagination -->
+        <nav class="pagination" aria-label="Search results pagination">
+          <span class="pagination-current">1</span>
+          <a href="#" class="pagination-link">2</a>
+          <a href="#" class="pagination-link">3</a>
+          <a href="#" class="pagination-link">4</a>
+          <a href="#" class="pagination-link">5</a>
+          <span class="pagination-ellipsis">. . .</span>
+          <a href="#" class="pagination-next">Next</a>
+        </nav>
+      </div>
+      
+      <!-- Right Sidebar -->
+      <aside class="sidebar">
+        <!-- Overview -->
+        <div class="sidebar-section overview-section">
+          <div class="section-header">
+            <h2 class="section-title">Overview</h2>
+            <button class="expand-btn" aria-label="Expand">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6l4 4 4-4" stroke="#141414" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="overview-text">Torem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac...Torem ipsum dolor sit amet, elit. Nunc vulputate libero et velit interdum, ac...</p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <a href="https://resy.com/cities/new-york-ny/venues/eavesdrop?date=2026-02-02&seats=2" class="action-btn primary" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.9 1.1V3H11.1V1.1H12.9V3H15V15H1V3H3.1V1.1H4.9ZM2.8 13.2H13.2V7H2.8V13.2ZM6.5 8H4V10.5H6.5V8Z" fill="white"/>
+            </svg>
+            Reserve
+          </a>
+          <a href="https://www.eavesdrop.nyc" class="action-btn primary" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.78 12.67C4.07 14.1 5.93 15 8 15C10.07 15 11.93 14.1 13.22 12.67C14.32 11.43 15 9.79 15 8C15 6.21 14.33 4.58 13.22 3.33C11.94 1.9 10.08 1 8 1C5.92 1 4.06 1.9 2.78 3.33C1.67 4.57 1 6.21 1 8C1 9.79 1.68 11.43 2.78 12.67ZM11.4801 7.25C11.3944 5.63997 11.0357 4.19407 10.4989 3.09951C11.0986 3.40477 11.6428 3.82004 12.1 4.33C12.8329 5.15244 13.3005 6.16717 13.4489 7.25H11.4801ZM9.9785 7.25H6.0215C6.20135 4.16048 7.46202 2.5 8 2.5C8.53798 2.5 9.79865 4.16048 9.9785 7.25ZM6.0215 8.75H9.9785C9.79865 11.8395 8.53798 13.5 8 13.5C7.46202 13.5 6.20135 11.8395 6.0215 8.75ZM4.51985 7.25H2.55109C2.6995 6.16717 3.16714 5.15244 3.9 4.33C4.35611 3.82126 4.9007 3.40677 5.50002 3.10171C4.9638 4.196 4.60555 5.64105 4.51985 7.25ZM2.55109 8.75H4.51985C4.6056 10.36 4.96428 11.8059 5.5011 12.9005C4.90139 12.5952 4.35721 12.18 3.9 11.67C3.16714 10.8476 2.6995 9.83283 2.55109 8.75ZM11.4801 8.75H13.449C13.3008 9.83253 12.8347 10.8457 12.11 11.66C11.6481 12.1747 11.101 12.5926 10.4995 12.8993C11.036 11.8049 11.3944 10.3595 11.4801 8.75Z" fill="white"/>
+            </svg>
+            Website
+          </a>
+        </div>
+        
+        <!-- Action List -->
+        <div class="action-list">
+          <div class="action-row">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.484 15C12.305 15 12.1311 14.9745 11.9573 14.9234C6.74625 13.3241 2.67563 9.26204 1.08012 4.05036C0.834651 3.25328 1.16705 2.39489 1.8881 1.96058L3.48362 1L6.45988 4.86788L5.03823 6.71241L5.29904 7.07007C6.32181 8.46496 7.5389 9.68613 8.91964 10.6978L9.27761 10.9584L11.1288 9.53796L15 12.5117L14.0386 14.1109C13.7113 14.6577 13.1079 15 12.4738 15H12.484Z" fill="#141414"/>
+            </svg>
+            <span class="action-label">(817) 726-7608</span>
+          </div>
+          <a href="https://www.eavesdrop.nyc" class="action-row" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.78 12.67C4.07 14.1 5.93 15 8 15C10.07 15 11.93 14.1 13.22 12.67C14.32 11.43 15 9.79 15 8C15 6.21 14.33 4.58 13.22 3.33C11.94 1.9 10.08 1 8 1C5.92 1 4.06 1.9 2.78 3.33C1.67 4.57 1 6.21 1 8C1 9.79 1.68 11.43 2.78 12.67ZM11.4801 7.25C11.3944 5.63997 11.0357 4.19407 10.4989 3.09951C11.0986 3.40477 11.6428 3.82004 12.1 4.33C12.8329 5.15244 13.3005 6.16717 13.4489 7.25H11.4801ZM9.9785 7.25H6.0215C6.20135 4.16048 7.46202 2.5 8 2.5C8.53798 2.5 9.79865 4.16048 9.9785 7.25ZM6.0215 8.75H9.9785C9.79865 11.8395 8.53798 13.5 8 13.5C7.46202 13.5 6.20135 11.8395 6.0215 8.75ZM4.51985 7.25H2.55109C2.6995 6.16717 3.16714 5.15244 3.9 4.33C4.35611 3.82126 4.9007 3.40677 5.50002 3.10171C4.9638 4.196 4.60555 5.64105 4.51985 7.25ZM2.55109 8.75H4.51985C4.6056 10.36 4.96428 11.8059 5.5011 12.9005C4.90139 12.5952 4.35721 12.18 3.9 11.67C3.16714 10.8476 2.6995 9.83283 2.55109 8.75ZM11.4801 8.75H13.449C13.3008 9.83253 12.8347 10.8457 12.11 11.66C11.6481 12.1747 11.101 12.5926 10.4995 12.8993C11.036 11.8049 11.3944 10.3595 11.4801 8.75Z" fill="#141414"/>
+            </svg>
+            <span class="action-label">Eavesdrop.nyc</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="link-icon">
+              <path d="M4.9 4.8C3.18792 4.8 1.8 6.18792 1.8 7.9C1.8 9.61208 3.18792 11 4.9 11H6.8V12.8H4.9C2.1938 12.8 0 10.6062 0 7.9C0 5.1938 2.1938 3 4.9 3H6.8V4.8H4.9ZM10.9 11C12.6121 11 14 9.61208 14 7.9C14 6.18792 12.6121 4.8 10.9 4.8L9 4.8V3H10.9C13.6062 3 15.8 5.19381 15.8 7.9C15.8 10.6062 13.6062 12.8 10.9 12.8H9V11H10.9ZM4 7V8.8L11.8 8.8V7L4 7Z" fill="#444444"/>
+            </svg>
+          </a>
+          <a href="https://www.eavesdrop.nyc/food" class="action-row" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.05 1C11.5382 1 9.5 3.03817 9.5 5.55V11.3H13.25V15H14.85V1H14.05ZM13.25 2.70995V9.7H11.1V5.55C11.1 4.19905 12.01 3.059 13.25 2.70995ZM3.75 1.00001V4.58002H2.6V1.00001H1V7.50002C1 8.49185 1.80817 9.30002 2.8 9.30002H3.75V15H5.35V9.30002H6.3C7.29183 9.30002 8.1 8.49185 8.1 7.50002V1.00001H6.5V4.58002H5.35V1.00001H3.75ZM2.6 6.18002H6.5V7.50002C6.5 7.60819 6.40817 7.70002 6.3 7.70002H2.8C2.69183 7.70002 2.6 7.60819 2.6 7.50002V6.18002Z" fill="#141414"/>
+            </svg>
+            <span class="action-label">Menu</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="link-icon">
+              <path d="M4.9 4.8C3.18792 4.8 1.8 6.18792 1.8 7.9C1.8 9.61208 3.18792 11 4.9 11H6.8V12.8H4.9C2.1938 12.8 0 10.6062 0 7.9C0 5.1938 2.1938 3 4.9 3H6.8V4.8H4.9ZM10.9 11C12.6121 11 14 9.61208 14 7.9C14 6.18792 12.6121 4.8 10.9 4.8L9 4.8V3H10.9C13.6062 3 15.8 5.19381 15.8 7.9C15.8 10.6062 13.6062 12.8 10.9 12.8H9V11H10.9ZM4 7V8.8L11.8 8.8V7L4 7Z" fill="#444444"/>
+            </svg>
+          </a>
+          <div class="action-row">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.8 9.6C13.5789 8.56142 14 7.29822 14 6C14 2.68629 11.3137 0 8 0C4.68629 0 2 2.68629 2 6C2 7.29822 2.42107 8.56142 3.2 9.6L7.76923 15.6923C7.88462 15.8462 8.11539 15.8462 8.23077 15.6923L12.8 9.6ZM4.64 8.52C4.09475 7.793 3.8 6.90875 3.8 6C3.8 3.6804 5.6804 1.8 8 1.8C10.3196 1.8 12.2 3.6804 12.2 6C12.2 6.90875 11.9053 7.793 11.36 8.52L8 13L4.64 8.52ZM8 8C9.10457 8 10 7.10457 10 6C10 4.89543 9.10457 4 8 4C6.89543 4 6 4.89543 6 6C6 7.10457 6.89543 8 8 8Z" fill="#141414"/>
+            </svg>
+            <span class="action-label">123 Electric Avenue</span>
+          </div>
+          <div id="hours-accordion" class="action-row hours-accordion-trigger">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_hours)">
+                <path d="M14.3 8C14.3 4.52061 11.4794 1.7 8 1.7C4.52061 1.7 1.7 4.52061 1.7 8C1.7 11.4794 4.52061 14.3 8 14.3C11.4794 14.3 14.3 11.4794 14.3 8ZM16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM7.15 4V9.85H11V8.15H8.85V4H7.15Z" fill="#141414"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_hours">
+                  <rect width="16" height="16" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <span class="action-label">
+              <span class="status-open">Open</span>
+              <span class="dot">•</span>
+              Closes at 11 PM
+            </span>
+            <svg class="accordion-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6l4 4 4-4" stroke="#141414" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="hours-accordion-content">
+            <div class="hours-list">
+              <div class="hours-row"><span>Monday</span><span>11 AM – 11 PM</span></div>
+              <div class="hours-row"><span>Tuesday</span><span>11 AM – 11 PM</span></div>
+              <div class="hours-row"><span>Wednesday</span><span>11 AM – 11 PM</span></div>
+              <div class="hours-row"><span>Thursday</span><span>11 AM – 11 PM</span></div>
+              <div class="hours-row"><span>Friday</span><span>11 AM – 11 PM</span></div>
+              <div class="hours-row"><span>Saturday</span><span>11 AM – 11 PM</span></div>
+              <div class="hours-row"><span>Sunday</span><span>11 AM – 11 PM</span></div>
+            </div>
+          </div>
+          <div class="action-list-divider"></div>
+        </div>
+        
+        <!-- Amenities -->
+        <div class="sidebar-section amenities-section">
+          <h2 class="section-title">Amenities</h2>
+          <div class="amenities-grid">
+            <div class="amenity-item">
+              <img src="Family.svg" alt="" width="16" height="16" />
+              <span>Lorem ipsum</span>
+            </div>
+            <div class="amenity-item">
+              <img src="HappyFace.svg" alt="" width="16" height="16" />
+              <span>Dolor</span>
+            </div>
+            <div class="amenity-item">
+              <img src="HeartPulse.svg" alt="" width="16" height="16" />
+              <span>Sit amet</span>
+            </div>
+            <div class="amenity-item">
+              <img src="Image.svg" alt="" width="16" height="16" />
+              <span>Consectetur</span>
+            </div>
+            <div class="amenity-item">
+              <img src="ImageGallery.svg" alt="" width="16" height="16" />
+              <span>Adipiscing elit</span>
+            </div>
+            <div class="amenity-item">
+              <img src="Profile.svg" alt="" width="16" height="16" />
+              <span>Sed do</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Reviews Summary -->
+        <div id="reviews-summary" class="sidebar-section reviews-section">
+          <h2 class="section-title">Reviews summary</h2>
+          <p class="reviews-count">10001 reviews on Yelp</p>
+          
+          <div class="rating-bars">
+            <div class="rating-bar-row">
+              <span class="star-label">5 star</span>
+              <div class="bar-container">
+                <div class="bar-fill bar-5" style="width: 65%"></div>
+              </div>
+              <span class="bar-count">69</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="star-label">4 star</span>
+              <div class="bar-container">
+                <div class="bar-fill bar-4" style="width: 22%"></div>
+              </div>
+              <span class="bar-count">26</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="star-label">3 star</span>
+              <div class="bar-container">
+                <div class="bar-fill bar-3" style="width: 4%"></div>
+              </div>
+              <span class="bar-count">5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="star-label">2 star</span>
+              <div class="bar-container">
+                <div class="bar-fill bar-2" style="width: 6%"></div>
+              </div>
+              <span class="bar-count">8</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="star-label">1 star</span>
+              <div class="bar-container">
+                <div class="bar-fill bar-1" style="width: 3%"></div>
+              </div>
+              <span class="bar-count">6</span>
+            </div>
+          </div>
+          
+          <!-- Reviews -->
+          <div class="reviews-list">
+            <article class="review-item">
+              <div class="review-header">
+                <div class="yelp-stars">
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                </div>
+                <span class="reviewer">Tony C.</span>
+                <span class="review-date">01/31/25</span>
+              </div>
+              <p class="review-text">Cute spot! Had a res for Saturday at 11pm. We just had drinks and sat for an hour to listen to music. The drinks were good and the host and service were efficient and pleasant. The music wasn't my kind of set personally electric/dance but it was enjoyable for the vibes the place gives. There was Enough space in the main room for seating and the decor is cool.</p>
+            </article>
+            
+            <article class="review-item">
+              <div class="review-header">
+                <div class="yelp-stars">
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                </div>
+                <span class="reviewer">Tony C.</span>
+                <span class="review-date">01/31/25</span>
+              </div>
+              <p class="review-text">Real chill spot w great service. They spin wax and have a great sound system. Host upfront did the most to make sure everyone was comfortable, in a good place and knew his customers. Bartenders kept them coming and poured em heavy. Interior was lounge like. Reservations definitely needed. Great spot for dates of hangin w the crew.</p>
+            </article>
+            
+            <article class="review-item">
+              <div class="review-header">
+                <div class="yelp-stars">
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                  <img src="icon/Yelp rating.svg" alt="star" width="14" height="14" />
+                </div>
+                <span class="reviewer">Tony C.</span>
+                <span class="review-date">01/31/25</span>
+              </div>
+              <p class="review-text">Love this spot. The ambiance is on point- soft music, dim lights, creative cocktails. What more can you ask for? Something I like too is the spot isn't overly crowded so you have space to move around and can actually hear the person / people you came with. Perfect for a date night or catching up with friends. Definitely recommend trying the kaleidoscope cocktail for something aesthetically pleasing and tasty.</p>
+            </article>
+          </div>
+          
+          <a href="https://www.yelp.com/biz/eavesdrop-brooklyn?osq=eavesdrop" class="more-reviews-btn" target="_blank" rel="noopener">
+            More reviews
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M4.5 2.5L8 6L4.5 9.5" stroke="#141414" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
