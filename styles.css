@@ -104,6 +104,116 @@ img {
   display: block;
 }
 
+/* Password gate (Figma: Q1-2026-Local) */
+.password-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  font-family: var(--font-family);
+}
+
+.password-gate.password-gate--hidden {
+  display: none;
+}
+
+.password-gate__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px;
+  width: 90%;
+}
+
+.password-gate__image-wrap {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
+
+.password-gate__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.password-gate__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #141414;
+  margin: 0 0 24px;
+  text-align: center;
+  line-height: var(--line-height-tight);
+}
+
+.password-gate__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.password-gate__input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--color-foreground-primary);
+  background: #ffffff;
+  border: 1px solid var(--color-line-primary);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.password-gate__input::placeholder {
+  color: var(--color-foreground-tertiary);
+}
+
+.password-gate__input:focus {
+  border-color: var(--color-primary);
+}
+
+.password-gate__input.password-gate__input--error {
+  border-color: #c00;
+}
+
+.password-gate__error {
+  margin: 0;
+  font-size: 14px;
+  color: #c00;
+  text-align: center;
+}
+
+.password-gate__btn {
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: #0f69ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.password-gate__btn:hover {
+  background: #0a5ae6;
+}
+
+.password-gate__btn:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 /* Header */
 .header {
   position: sticky;
@@ -474,6 +584,7 @@ img {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -70%);
+  z-index: 5;
 }
 
 .map-datum {

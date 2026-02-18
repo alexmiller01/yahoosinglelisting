@@ -3,7 +3,13 @@
  * Interactive behaviors for Yahoo Search local business results
  */
 
+// Password gate: only SHA-256 hash of password is stored (password never in source)
+const PASSWORD_GATE_STORAGE_KEY = 'x_sb_demo_v';
+const PASSWORD_EXPECTED_HASH_HEX = 'c1f2ec2bcbfef08e85aac507b5b1c1982f6289ac4cad445b01bf064fff1e2f31';
+const SESSION_PROOF_SALT = '7f8a9b2c3d4e5f6a'; // used to derive session proof, not the password
+
 document.addEventListener('DOMContentLoaded', () => {
+  initializePasswordGate();
   initializeSearchField();
   initializeTabs();
   initializeExpandableOverview();
@@ -14,59 +20,137 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * HERE Maps Integration
+ * Hash a string with SHA-256 (Web Crypto), returns hex string
  */
+function sha256Hex(str) {
+  var encoder = new TextEncoder();
+  var data = encoder.encode(str);
+  return crypto.subtle.digest('SHA-256', data).then(function (buffer) {
+    var arr = new Uint8Array(buffer);
+    var hex = '';
+    for (var i = 0; i < arr.length; i++) { hex += ('0' + arr[i].toString(16)).slice(-2); }
+    return hex;
+  });
+}
+
+/**
+ * Derive a session proof from the known hash (so stored value isn’t guessable)
+ */
+function sessionProof() {
+  return sha256Hex(PASSWORD_EXPECTED_HASH_HEX + SESSION_PROOF_SALT);
+}
+
+/**
+ * Password gate – no plain-text password in code; compare SHA-256 hash only.
+ * Session unlock stored with derived proof so it can’t be faked by setting a simple flag.
+ */
+function initializePasswordGate() {
+  var gate = document.getElementById('password-gate');
+  var form = document.getElementById('password-form');
+  var input = document.getElementById('password-input');
+  var errorEl = document.getElementById('password-error');
+  var submitBtn = form && form.querySelector('button[type="submit"]');
+
+  if (!gate || !form || !input) return;
+
+  sessionProof().then(function (proof) {
+    if (sessionStorage.getItem(PASSWORD_GATE_STORAGE_KEY) === proof) {
+      gate.classList.add('password-gate--hidden');
+      return;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var value = (input.value || '').trim();
+      if (!value) {
+        errorEl.hidden = false;
+        input.classList.add('password-gate__input--error');
+        input.focus();
+        return;
+      }
+      if (submitBtn) { submitBtn.disabled = true; }
+      sha256Hex(value).then(function (inputHash) {
+        if (submitBtn) { submitBtn.disabled = false; }
+        if (inputHash === PASSWORD_EXPECTED_HASH_HEX) {
+          sessionProof().then(function (p) {
+            sessionStorage.setItem(PASSWORD_GATE_STORAGE_KEY, p);
+            errorEl.hidden = true;
+            input.classList.remove('password-gate__input--error');
+            gate.classList.add('password-gate--hidden');
+          });
+        } else {
+          errorEl.hidden = false;
+          input.classList.add('password-gate__input--error');
+          input.focus();
+        }
+      }).catch(function () {
+        if (submitBtn) { submitBtn.disabled = false; }
+        errorEl.hidden = false;
+        input.classList.add('password-gate__input--error');
+      });
+    });
+  });
+}
+
+/**
+ * HERE Maps with HARP rendering and custom style
+ */
+const HERE_API_KEY = 'CJQ-lNVWhFhWMO8mTrCJ-SAPvK4Cv3dsfs3VqONzJpo';
+const MAP_CENTER = { lat: 40.7291, lng: -73.9542 };
+const MAP_ZOOM = 15;
+// Project folder: style/style.json (HERE Style Editor export)
+const STYLE_JSON_URL = new URL('style/style.json', window.location.href).href;
+
 function initializeHereMap() {
-  const mapContainer = document.getElementById('here-map');
-  
+  var mapContainer = document.getElementById('here-map');
+
   if (!mapContainer || typeof H === 'undefined') {
     console.warn('HERE Maps SDK not loaded or map container not found');
     return;
   }
-  
-  const platform = new H.service.Platform({
-    apikey: 'CJQ-lNVWhFhWMO8mTrCJ-SAPvK4Cv3dsfs3VqONzJpo'
+
+  var platform = new H.service.Platform({ apikey: HERE_API_KEY });
+  var defaultLayers = platform.createDefaultLayers();
+  var baseLayer;
+
+  try {
+    var style = new H.map.render.harp.Style(STYLE_JSON_URL);
+    if (style && platform.getOMVService) {
+      baseLayer = platform.getOMVService().createLayer(style);
+    }
+  } catch (e) {
+    console.warn('HERE custom style failed, using default vector layer', e);
+  }
+  if (!baseLayer) {
+    baseLayer = defaultLayers.vector.normal.map;
+  }
+
+  var map = new H.Map(mapContainer, baseLayer, {
+    center: MAP_CENTER,
+    zoom: MAP_ZOOM,
+    pixelRatio: window.devicePixelRatio || 1
   });
-  
-  const defaultLayers = platform.createDefaultLayers();
-  
-  const map = new H.Map(
-    mapContainer,
-    defaultLayers.vector.normal.map,
-    {
-      center: { lat: 40.7291, lng: -73.9542 },
-      zoom: 15,
-      pixelRatio: window.devicePixelRatio || 1
-    }
-  );
-  
-  // Add custom marker for Eavesdrop location
-  const iconElement = document.createElement('div');
-  iconElement.innerHTML = `<img src="Default-pin.svg" width="22" height="37" style="transform: translate(-50%, -100%);" />`;
-  const domIcon = new H.map.DomIcon(iconElement);
-  const marker = new H.map.DomMarker({ lat: 40.7291, lng: -73.9542 }, { icon: domIcon });
+
+  function resizeMap() {
+    if (map.getViewPort()) map.getViewPort().resize();
+  }
+  window.addEventListener('resize', resizeMap);
+  setTimeout(resizeMap, 100);
+  setTimeout(resizeMap, 500);
+
+  var iconElement = document.createElement('div');
+  iconElement.innerHTML = '<img src="Default-pin.svg" width="22" height="37" style="transform: translate(-50%, -100%);" alt="" />';
+  var domIcon = new H.map.DomIcon(iconElement);
+  var marker = new H.map.DomMarker(MAP_CENTER, { icon: domIcon });
   map.addObject(marker);
-  
-  // Hide HERE branding
-  const style = document.createElement('style');
-  style.textContent = `
-    #here-map .H_logo,
-    #here-map .H_copyright {
-      display: none !important;
-    }
-  `;
-  document.head.appendChild(style);
-  
-  // Add custom info icon
-  const infoIcon = document.createElement('div');
+
+  var styleEl = document.createElement('style');
+  styleEl.textContent = '#here-map .H_logo, #here-map .H_copyright { display: none !important; }';
+  document.head.appendChild(styleEl);
+
+  var infoIcon = document.createElement('div');
   infoIcon.className = 'map-info-icon';
-  infoIcon.innerHTML = `
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="6" cy="6" r="5" stroke="#666" stroke-width="1.5" fill="none"/>
-      <path d="M6 5.5V8.5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="6" cy="3.5" r="0.75" fill="#666"/>
-    </svg>
-  `;
+  infoIcon.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5" stroke="#666" stroke-width="1.5" fill="none"/><path d="M6 5.5V8.5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="3.5" r="0.75" fill="#666"/></svg>';
   mapContainer.appendChild(infoIcon);
 }
 
