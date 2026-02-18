@@ -8,11 +8,40 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- HERE Maps SDK -->
+  <!-- HERE Maps SDK (HARP rendering for vector layer) -->
   <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
   <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-harp.js"></script>
 </head>
 <body>
+  <!-- Password gate (Figma: Q1-2026-Local) -->
+  <div id="password-gate" class="password-gate" aria-live="polite">
+    <div class="password-gate__inner">
+      <div class="password-gate__image-wrap">
+        <img
+          class="password-gate__image"
+          src="password-gate-avatar.jpg"
+          alt=""
+          width="120"
+          height="120"
+        />
+      </div>
+      <h1 class="password-gate__title">You shall not pass</h1>
+      <form id="password-form" class="password-gate__form" novalidate>
+        <input
+          type="password"
+          id="password-input"
+          class="password-gate__input"
+          placeholder="Unless you enter the password, what is it?"
+          autocomplete="current-password"
+          aria-label="Password"
+        />
+        <p id="password-error" class="password-gate__error" role="alert" hidden>Wrong password. Try again.</p>
+        <button type="submit" class="password-gate__btn">Continue</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Header -->
   <header class="header">
     <div class="header-content">
