@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeActionButtons();
   initializeRatingBars();
   initializeHereMap();
+  initializeMapCardCopy();
 });
 
 /**
@@ -93,13 +94,43 @@ function initializePasswordGate() {
 }
 
 /**
- * HERE Maps with HARP rendering and custom style
+ * Map card: on click copy address and show temporary "Address copied!" tooltip
+ */
+function initializeMapCardCopy() {
+  var mapCard = document.querySelector('a.map-card');
+  if (!mapCard) return;
+
+  mapCard.addEventListener('click', function (e) {
+    e.preventDefault();
+    var addressEl = mapCard.querySelector('.address');
+    var addressText = addressEl ? addressEl.innerText.replace(/\s+/g, ' ').trim() : '674 Manhattan Ave, Brooklyn, NY 11222';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(addressText).catch(function () {});
+    }
+
+    var tooltip = document.createElement('div');
+    tooltip.className = 'map-card-copy-tooltip';
+    tooltip.setAttribute('role', 'status');
+    tooltip.textContent = 'Address copied!';
+    mapCard.appendChild(tooltip);
+
+    setTimeout(function () {
+      tooltip.classList.add('map-card-copy-tooltip--hide');
+      setTimeout(function () {
+        if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
+      }, 200);
+    }, 1500);
+  });
+}
+
+/**
+ * HERE Maps with HARP engine – custom styles from project style.json
+ * Pattern: fetch style.json, H.map.render.harp.Style(style), apply to default vector layer
  */
 const HERE_API_KEY = 'CJQ-lNVWhFhWMO8mTrCJ-SAPvK4Cv3dsfs3VqONzJpo';
 const MAP_CENTER = { lat: 40.7291, lng: -73.9542 };
 const MAP_ZOOM = 15;
-// Project folder: style/style.json (HERE Style Editor export)
-const STYLE_JSON_URL = new URL('style/style.json', window.location.href).href;
+var STYLE_JSON_URL = new URL('style/style.json', window.location.href).href;
 
 function initializeHereMap() {
   var mapContainer = document.getElementById('here-map');
@@ -111,47 +142,86 @@ function initializeHereMap() {
 
   var platform = new H.service.Platform({ apikey: HERE_API_KEY });
   var defaultLayers = platform.createDefaultLayers();
-  var baseLayer;
+  var baseLayer = defaultLayers.vector.normal.map;
 
-  try {
-    var style = new H.map.render.harp.Style(STYLE_JSON_URL);
-    if (style && platform.getOMVService) {
-      baseLayer = platform.getOMVService().createLayer(style);
+  function createMapWithLayer(layer) {
+    var map = new H.Map(mapContainer, layer, {
+      center: MAP_CENTER,
+      zoom: MAP_ZOOM,
+      pixelRatio: window.devicePixelRatio || 1
+    });
+
+    function resizeMap() {
+      if (map.getViewPort()) map.getViewPort().resize();
     }
-  } catch (e) {
-    console.warn('HERE custom style failed, using default vector layer', e);
+    window.addEventListener('resize', resizeMap);
+    setTimeout(resizeMap, 100);
+    setTimeout(resizeMap, 500);
+
+    var iconElement = document.createElement('div');
+    iconElement.innerHTML = '<img src="Default-pin.svg" width="22" height="37" style="transform: translate(-50%, -100%);" alt="" />';
+    var domIcon = new H.map.DomIcon(iconElement);
+    var marker = new H.map.DomMarker(MAP_CENTER, { icon: domIcon });
+    map.addObject(marker);
+
+    var styleEl = document.createElement('style');
+    styleEl.textContent = '#here-map .H_logo, #here-map .H_copyright { display: none !important; }';
+    document.head.appendChild(styleEl);
+
+    var infoIcon = document.createElement('div');
+    infoIcon.className = 'map-info-icon';
+    infoIcon.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5" stroke="#666" stroke-width="1.5" fill="none"/><path d="M6 5.5V8.5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="3.5" r="0.75" fill="#666"/></svg>';
+    mapContainer.appendChild(infoIcon);
   }
-  if (!baseLayer) {
-    baseLayer = defaultLayers.vector.normal.map;
+
+  function applyHarpStyleAndCreateMap() {
+    var style = null;
+    try {
+      if (H.map && H.map.render && H.map.render.harp && H.map.render.harp.Style) {
+        style = new H.map.render.harp.Style(STYLE_JSON_URL);
+      }
+    } catch (e) {
+      console.warn('HARP Style from URL failed', e);
+    }
+    if (style) {
+      try {
+        var provider = baseLayer.getProvider && baseLayer.getProvider();
+        if (provider && provider.setStyle) {
+          provider.setStyle(style);
+        }
+      } catch (e) {
+        console.warn('setStyle on provider failed', e);
+      }
+    }
+    createMapWithLayer(baseLayer);
   }
 
-  var map = new H.Map(mapContainer, baseLayer, {
-    center: MAP_CENTER,
-    zoom: MAP_ZOOM,
-    pixelRatio: window.devicePixelRatio || 1
-  });
-
-  function resizeMap() {
-    if (map.getViewPort()) map.getViewPort().resize();
-  }
-  window.addEventListener('resize', resizeMap);
-  setTimeout(resizeMap, 100);
-  setTimeout(resizeMap, 500);
-
-  var iconElement = document.createElement('div');
-  iconElement.innerHTML = '<img src="Default-pin.svg" width="22" height="37" style="transform: translate(-50%, -100%);" alt="" />';
-  var domIcon = new H.map.DomIcon(iconElement);
-  var marker = new H.map.DomMarker(MAP_CENTER, { icon: domIcon });
-  map.addObject(marker);
-
-  var styleEl = document.createElement('style');
-  styleEl.textContent = '#here-map .H_logo, #here-map .H_copyright { display: none !important; }';
-  document.head.appendChild(styleEl);
-
-  var infoIcon = document.createElement('div');
-  infoIcon.className = 'map-info-icon';
-  infoIcon.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="5" stroke="#666" stroke-width="1.5" fill="none"/><path d="M6 5.5V8.5" stroke="#666" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="3.5" r="0.75" fill="#666"/></svg>';
-  mapContainer.appendChild(infoIcon);
+  fetch(STYLE_JSON_URL)
+    .then(function (res) { return res.ok ? res.json() : Promise.reject(new Error('style.json not found')); })
+    .then(function (styleJson) {
+      var style = null;
+      try {
+        if (H.map && H.map.render && H.map.render.harp && H.map.render.harp.Style) {
+          style = new H.map.render.harp.Style(styleJson);
+        }
+      } catch (e) {
+        console.warn('HARP Style from object failed', e);
+      }
+      if (style) {
+        try {
+          var provider = baseLayer.getProvider && baseLayer.getProvider();
+          if (provider && provider.setStyle) {
+            provider.setStyle(style);
+          }
+        } catch (e) {
+          console.warn('setStyle on provider failed', e);
+        }
+      }
+      createMapWithLayer(baseLayer);
+    })
+    .catch(function () {
+      applyHarpStyleAndCreateMap();
+    });
 }
 
 /**

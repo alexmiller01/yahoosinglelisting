@@ -527,12 +527,53 @@ img {
 
 /* Map Card - columns 11-16 */
 .map-card {
+  position: relative;
   grid-column: 11 / 17;
   grid-row: 1 / 7;
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-lg);
   overflow: hidden;
+}
+
+.map-card-copy-icon {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.map-card:hover .map-card-copy-icon {
+  opacity: 1;
+}
+
+/* Address copied tooltip – matches Figma Q1-2026-Local (node 870-25403) */
+.map-card-copy-tooltip {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 16px;
+  background: var(--color-background-primary);
+  color: var(--color-foreground-primary);
+  font-size: 11pt;
+  font-weight: 400;
+  white-space: nowrap;
+  border: 1px solid var(--color-line-primary);
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.map-card-copy-tooltip.map-card-copy-tooltip--hide {
+  opacity: 0;
 }
 
 .map-image {
@@ -551,15 +592,15 @@ img {
   object-fit: cover;
 }
 
-#here-map {
+.map-thumbnail {
   width: 100%;
-  height: 180px;
+  height: 100%;
   transform: scale(1.1);
   transform-origin: center;
   transition: transform 0.3s ease;
 }
 
-.map-card:hover #here-map {
+.map-card:hover .map-thumbnail {
   transform: scale(1);
 }
 
@@ -583,13 +624,16 @@ img {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -70%);
+  transform: translate(-50%, -50%);
   z-index: 5;
 }
 
 .map-datum {
   background: var(--color-background-accent);
-  padding: 16px;
+  padding-top: 20px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   transition: background 0.15s ease;
 }
@@ -603,6 +647,7 @@ img {
   font-weight: 500;
   line-height: 24px;
   color: var(--color-foreground-primary);
+  margin: 0;
 }
 
 /* Info Cards - columns 17-22 */
