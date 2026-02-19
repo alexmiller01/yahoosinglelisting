@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeActionButtons();
   initializeRatingBars();
   initializeHereMap();
-  initializeMapCardCopy();
 });
 
 /**
@@ -90,36 +89,6 @@ function initializePasswordGate() {
         input.classList.add('password-gate__input--error');
       });
     });
-  });
-}
-
-/**
- * Map card: on click copy address and show temporary "Address copied!" tooltip
- */
-function initializeMapCardCopy() {
-  var mapCard = document.querySelector('a.map-card');
-  if (!mapCard) return;
-
-  mapCard.addEventListener('click', function (e) {
-    e.preventDefault();
-    var addressEl = mapCard.querySelector('.address');
-    var addressText = addressEl ? addressEl.innerText.replace(/\s+/g, ' ').trim() : '674 Manhattan Ave, Brooklyn, NY 11222';
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(addressText).catch(function () {});
-    }
-
-    var tooltip = document.createElement('div');
-    tooltip.className = 'map-card-copy-tooltip';
-    tooltip.setAttribute('role', 'status');
-    tooltip.textContent = 'Address copied!';
-    mapCard.appendChild(tooltip);
-
-    setTimeout(function () {
-      tooltip.classList.add('map-card-copy-tooltip--hide');
-      setTimeout(function () {
-        if (tooltip.parentNode) tooltip.parentNode.removeChild(tooltip);
-      }, 200);
-    }, 1500);
   });
 }
 
